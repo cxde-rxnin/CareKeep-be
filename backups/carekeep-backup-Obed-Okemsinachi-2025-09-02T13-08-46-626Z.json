@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-09-02T13:08:46.626Z",
+  "version": "1.0",
+  "doctor": {
+    "_id": "68b6ec1ef77b4b69713d0be7",
+    "name": "Obed Okemsinachi",
+    "email": "obedokemsinachi@gmail.com",
+    "role": "doctor",
+    "createdAt": "2025-09-02T13:07:42.737Z",
+    "updatedAt": "2025-09-02T13:07:42.737Z",
+    "__v": 0
+  },
+  "data": {
+    "patients": [
+      {
+        "_id": "68b6ec4df77b4b69713d0bf0",
+        "name": "John Hart",
+        "age": 24,
+        "dob": "2000-09-11T00:00:00.000Z",
+        "gender": "male",
+        "doctor": "68b6ec1ef77b4b69713d0be7",
+        "medicalHistory": [],
+        "records": [],
+        "createdAt": "2025-09-02T13:08:29.769Z",
+        "updatedAt": "2025-09-02T13:08:29.769Z",
+        "__v": 0
+      }
+    ],
+    "totalPatients": 1
+  }
+}
