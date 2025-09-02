@@ -21,7 +21,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
 app.use(helmet());
-app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
