@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes";
 import patientRoutes from "./routes/patient.routes";
 import documentRoutes from "./routes/document.routes";
 import backupRoutes from "./routes/backup.routes";
+import metricsRoutes from './routes/metrics.routes';
 import { errorHandler } from "./middleware/error.middleware";
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/backups", backupRoutes);
+app.use('/api/metrics', metricsRoutes);
 
 app.use(errorHandler);
 

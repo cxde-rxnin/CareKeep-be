@@ -8,5 +8,6 @@ router.post("/", authMiddleware, patientController.createPatient);
 router.get("/", authMiddleware, patientController.listPatients);
 router.get("/:id", authMiddleware, patientController.getPatient);
 router.put("/:id", authMiddleware, patientController.updatePatient);
+router.patch("/:id/status", authMiddleware, patientController.updatePatientStatus);
 
 export default router;

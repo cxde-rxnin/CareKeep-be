@@ -1,0 +1,6 @@
+Hospital Name,Email,Address,Phone,Generated At,Total Patients
+"Angelwood General Hospital","obedokemsinachi@gmail.com","123 Mary Lane, Port Harcourt, Nigeria","+234 8124731527","2025-09-03T13:35:38.014Z","2"
+
+Index,_id,address,createdAt,dateAdmitted,dateOfBirth,doctorInCharge,documents,emergencyContactAddress,emergencyContactName,emergencyContactNumber,folderType,gender,hospital,name,patientStatus,records,roomNumber,timeAdmitted,updatedAt
+"1","""68b8313fbd4c28992b3f8768""","123 Main St, Anytown, AN 12345","2025-09-03T12:14:55.355Z","2025-09-03T00:00:00.000Z","2000-09-11T00:00:00.000Z","","68b835b6c49c23683c8a0b9b; 68b837d9463f63210f6d5297","4 Okocha close","Obed Okemsinachi","08124731527","Inpatient","male","""68b81d33c805879caf7627a2""","John Hart","Admitted","","12B","13:30","2025-09-03T12:43:05.685Z"
+"2","""68b8441c8843fc4e834f0a20""","Pleasure Park, Port Harcourt","2025-09-03T13:35:24.183Z","2025-09-02T00:00:00.000Z","1999-01-25T00:00:00.000Z","","","4 Okocha close","Obed Okemsinachi","08124731527","Operation","female","""68b81d33c805879caf7627a2""","Grace Bellock","Admitted","","13C","14:35","2025-09-03T13:35:24.183Z"
