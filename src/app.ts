@@ -13,7 +13,10 @@ const app = express();
 
 app.use(express.json());
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "https://carekeep.vercel.app",
+  origin: [
+    "https://carekeep.vercel.app",
+    "http://localhost:5173"
+  ],
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization"],
