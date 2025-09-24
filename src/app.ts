@@ -12,9 +12,8 @@ import { errorHandler } from "./middleware/error.middleware";
 const app = express();
 
 app.use(express.json());
-// configure CORS to allow the frontend origin and credentials
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: process.env.FRONTEND_URL || "https://carekeep.vercel.app",
   credentials: true,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   allowedHeaders: ["Content-Type", "Authorization"],

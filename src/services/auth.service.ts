@@ -48,7 +48,6 @@ export const initiateRegistration = async (data: Partial<IUser>) => {
   console.log('💾 [AUTH SERVICE] Stored pending registration for session:', sessionId);
 
   try {
-    // Send OTP email
     console.log('📧 [AUTH SERVICE] Attempting to send OTP email to:', data.email);
     await sendOTPEmail(data.email!, otp, data.hospitalName!);
     console.log('✅ [AUTH SERVICE] OTP email sent successfully');
@@ -92,10 +91,8 @@ export const verifyOTPAndRegister = async (sessionId: string, otp: string) => {
   
   const savedUser = await user.save();
   
-  // Clean up pending registration
   removePendingRegistration(sessionId);
   
-  // Generate JWT token for immediate login
   const token = jwt.sign({ id: savedUser._id, role: savedUser.role }, JWT_SECRET, {
     expiresIn: "1d"
   });

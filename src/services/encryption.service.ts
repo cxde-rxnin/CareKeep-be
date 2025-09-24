@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-const ENCRYPTION_KEY = crypto.randomBytes(32); // Change in production
+const ENCRYPTION_KEY = crypto.randomBytes(32);
 const IV = crypto.randomBytes(16);
 
 export const encryptData = (data: string) => {
