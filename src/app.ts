@@ -11,19 +11,27 @@ import { errorHandler } from "./middleware/error.middleware";
 
 const app = express();
 
-app.use(express.json());
+// CORS configuration - must be early in middleware stack
 const corsOptions = {
   origin: [
     "https://carekeep.vercel.app",
     "http://localhost:5173"
   ],
   credentials: true,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
+
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle preflight for all routes
+
+app.use(express.json());
 app.use(morgan("dev"));
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
