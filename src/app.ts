@@ -25,7 +25,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle preflight for all routes
+// Removed the problematic app.options('*', cors(corsOptions)) line
 
 app.use(express.json());
 app.use(morgan("dev"));
