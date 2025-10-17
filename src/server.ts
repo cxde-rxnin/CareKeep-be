@@ -6,10 +6,19 @@ import { Server as SocketIOServer } from 'socket.io';
 
 connectDB();
 
+const allowedOrigins = [
+  "https://carekeep.vercel.app",
+  "http://localhost:5173"
+];
+
 const server = createServer(app);
 const io = new SocketIOServer(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "https://carekeep.vercel.app",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"), false);
+    },
     methods: ["GET", "POST"]
   }
 });
