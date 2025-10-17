@@ -8,7 +8,7 @@ export const create = async (req: Request, res: Response) => {
     const backup = await backupService.createBackup(userId);
 
     // Emit real-time activity update
-    emitActivityUpdate('backup', `Backup ${backup.status}`, backup);
+    emitActivityUpdate(userId, 'backup', `Backup ${backup.status}`, backup);
 
     res.json(backup);
   } catch (err: any) {

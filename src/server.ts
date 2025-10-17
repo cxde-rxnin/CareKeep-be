@@ -26,12 +26,36 @@ const io = new SocketIOServer(server, {
 (global as any).io = io;
 
 io.on('connection', (socket) => {
-  console.log(`🔌 Client connected: ${socket.id}`);
-  
+  // Expect JWT in query: ?token=...
+  const token = socket.handshake.query.token as string | undefined;
+  let hospitalId: string | null = null;
+  if (token) {
+    try {
+      // Use same JWT_SECRET as backend
+      const jwt = require('jsonwebtoken');
+      const { JWT_SECRET } = require('./config/env');
+      const decoded = jwt.verify(token, JWT_SECRET);
+      hospitalId = decoded.id;
+      if (hospitalId) {
+        socket.join(hospitalId);
+        console.log(`🔌 Socket ${socket.id} joined room ${hospitalId}`);
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        console.warn('Socket auth failed:', e.message);
+      } else {
+        console.warn('Socket auth failed:', e);
+      }
+    }
+  }
   socket.on('disconnect', () => {
     console.log(`🔌 Client disconnected: ${socket.id}`);
   });
 });
+
+(global as any).emitActivityToHospital = (hospitalId: string, payload: any) => {
+  io.to(hospitalId).emit('activity_update', payload);
+};
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);

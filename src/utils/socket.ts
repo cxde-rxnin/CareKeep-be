@@ -1,8 +1,8 @@
 // Utility to emit activity updates via WebSocket
-export const emitActivityUpdate = (type: string, message: string, data?: any) => {
-  const io = (global as any).io;
-  if (io) {
-    io.emit('activity_update', {
+export const emitActivityUpdate = (hospitalId: string, type: string, message: string, data?: any) => {
+  const emitToHospital = (global as any).emitActivityToHospital;
+  if (emitToHospital && hospitalId) {
+    emitToHospital(hospitalId, {
       type,
       message,
       at: new Date(),

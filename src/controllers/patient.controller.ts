@@ -12,7 +12,7 @@ export const createPatient = async (req: Request, res: Response) => {
     const patient = await Patient.create(patientData);
     
     // Emit real-time activity update
-    emitActivityUpdate('patient', `New patient: ${patient.name || 'Unnamed'}`, patient);
+    emitActivityUpdate((req as any).user.id, 'patient', `New patient: ${patient.name || 'Unnamed'}`, patient);
     
     res.json(patient);
   } catch (err: any) {

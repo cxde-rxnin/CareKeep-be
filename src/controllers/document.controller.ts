@@ -78,7 +78,7 @@ export const uploadDocument = async (req: Request, res: Response) => {
     }
 
     // Emit real-time activity update
-    emitActivityUpdate('document', `Document uploaded: ${doc.fileName}`, doc);
+    emitActivityUpdate((req as any).user.id, 'document', `Document uploaded: ${doc.fileName}`, doc);
 
     return res.json({
       id: doc._id,

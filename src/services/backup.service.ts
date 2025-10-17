@@ -1,9 +1,6 @@
 import Backup from "../models/backup.model";
 import Patient from "../models/patient.model";
 import User from "../models/user.model";
-import path from "path";
-import fs from "fs/promises";
-import * as fsSync from "fs";
 import { sendBackupEmail } from "./email.service";
 
 export const createBackup = async (userId: string) => {
@@ -16,15 +13,13 @@ export const createBackup = async (userId: string) => {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const baseName = `carekeep-backup-${hospital?.hospitalName?.replace(/\s+/g, '-') || 'hospital'}-${timestamp}`;
     const filename = `${baseName}.csv`;
-    const backupsDir = path.join(process.cwd(), 'backups');
-    const filepath = path.join(backupsDir, filename);
-    await fs.mkdir(backupsDir, { recursive: true });
 
-    await createCSVBackup(filepath, hospital, patients);
+    // Generate CSV in memory
+    const csv = await createCSVBackupInMemory(hospital, patients);
 
     if (hospital?.email) {
       try {
-        await sendBackupEmail(hospital.email, hospital.hospitalName, filepath, patients.length);
+        await sendBackupEmail(hospital.email, hospital.hospitalName, filename, patients.length, csv);
       } catch (emailError) {
         console.error('Failed to send backup email:', emailError);
       }
@@ -33,7 +28,6 @@ export const createBackup = async (userId: string) => {
     return await Backup.create({
       status: "completed",
       snapshotKey: filename,
-      filePath: filepath,
       doctor: userId
     });
   } catch (error) {
@@ -52,24 +46,10 @@ export const listBackups = async (userId: string) => {
 };
 
 export const getBackupFile = async (backupId: string, userId: string) => {
-  const backup = await Backup.findOne({ _id: backupId, doctor: userId });
-  if (!backup || backup.status !== 'completed' || !backup.filePath) {
-    throw new Error('Backup not found or not available for download');
-  }
-  
-  try {
-    await fs.access(backup.filePath);
-    return {
-      backup,
-      filePath: backup.filePath,
-      filename: backup.snapshotKey
-    };
-  } catch (error) {
-    throw new Error('Backup file not found on disk');
-  }
+  throw new Error('Backup download not supported on serverless. Check your email for the backup CSV.');
 };
 
-const createCSVBackup = async (filepath: string, hospital: any, patients: any[]) => {
+const createCSVBackupInMemory = async (hospital: any, patients: any[]) => {
   const headersHospital = ['Hospital Name','Email','Address','Phone','Generated At','Total Patients'];
   const hospitalRow = [
     wrap(hospital?.hospitalName),
@@ -79,21 +59,17 @@ const createCSVBackup = async (filepath: string, hospital: any, patients: any[])
     wrap(new Date().toISOString()),
     wrap(patients.length)
   ];
-
   // Collect all unique patient keys to ensure we export all fields
   const patientKeys = new Set<string>();
   patients.forEach(p => Object.keys(p).forEach(k => {
     if (!['__v'].includes(k)) patientKeys.add(k);
   }));
   const orderedKeys = Array.from(patientKeys).sort();
-
   const patientHeader = ['Index', ...orderedKeys];
-
   let csv = '';
   csv += headersHospital.join(',') + '\n';
   csv += hospitalRow.join(',') + '\n\n';
   csv += patientHeader.join(',') + '\n';
-
   patients.forEach((p, idx) => {
     const row = [wrap(idx + 1)];
     orderedKeys.forEach(k => {
@@ -110,8 +86,7 @@ const createCSVBackup = async (filepath: string, hospital: any, patients: any[])
     });
     csv += row.join(',') + '\n';
   });
-
-  await fs.writeFile(filepath, csv, 'utf8');
+  return csv;
 };
 
 function wrap(value: any) {

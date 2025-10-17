@@ -67,8 +67,9 @@ export const sendOTPEmail = async (email: string, otp: string, hospitalName: str
 export const sendBackupEmail = async (
   email: string,
   hospitalName: string,
-  backupFilePath: string,
-  patientCount: number
+  filename: string,
+  patientCount: number,
+  csvContent: string | Buffer
 ) => {
   const mailOptions = {
     from: EMAIL_FROM,
@@ -98,7 +99,7 @@ export const sendBackupEmail = async (
       </div>
     `,
     attachments: [
-      { filename: `backup-${new Date().toISOString().split('T')[0]}.csv`, path: backupFilePath }
+      { filename, content: csvContent }
     ]
   };
 
